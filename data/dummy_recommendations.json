@@ -1,0 +1,41 @@
+[
+  {
+    "activityId": "uuid-2",
+    "activityName": "Diesel",
+    "scope": "1.1",
+    "impactLevel": "HIGH",
+    "estimatedReductionPercentage": 30.00,
+    "feasibilityScore": 8.5,
+    "feasibilityLevel": "HIGH",
+    "cost": 8000.0,
+    "infrastructureRequirements": "No major infrastructure changes",
+    "technologyStatus": "Commercially available globally",
+    "recommendation": "Replace diesel generators with solar PV"
+  },
+  {
+    "activityId": "uuid-1",
+    "activityName": "Natural Gas",
+    "scope": "1.1",
+    "impactLevel": "MEDIUM",
+    "estimatedReductionPercentage": 15.0,
+    "feasibilityScore": 6.2,
+    "feasibilityLevel": "MEDIUM",
+    "cost": 25000.0,
+    "infrastructureRequirements": "Minor pipeline retrofitting",
+    "technologyStatus": "Available in select regions",
+    "recommendation": "Switch to biogas or RNG"
+  },
+  {
+    "activityId": "uuid-2",
+    "activityName": "Diesel",
+    "scope": "1.1",
+    "impactLevel": "LOW",
+    "estimatedReductionPercentage": 3.0,
+    "feasibilityScore": 3.5,
+    "feasibilityLevel": "LOW",
+    "cost": 120000.0,
+    "infrastructureRequirements": "New infrastructure required",
+    "technologyStatus": "Emerging technology",
+    "recommendation": "Conduct staff training on eco-driving"
+  }
+]

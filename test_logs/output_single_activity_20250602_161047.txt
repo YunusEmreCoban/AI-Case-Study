@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    {
+      "activityId": "uuid-2",
+      "activityName": "Diesel",
+      "scope": "1.1",
+      "recommendation": "Replace diesel generators with solar PV",
+      "impactLevel": "HIGH",
+      "estimatedReductionPercentage": 30.0,
+      "feasibilityScore": 8.5,
+      "feasibilityLevel": "HIGH",
+      "cost": 8000.0,
+      "infrastructureRequirements": "No major infrastructure changes",
+      "technologyStatus": "Commercially available globally"
+    }
+  ]
+}

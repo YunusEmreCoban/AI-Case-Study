@@ -1,0 +1,11 @@
+{
+  "scope": "1.1",
+  "scopeName": "Stationary Combustion",
+  "recommendationAmount": 2,
+  "activityId": "uuid-2",
+  "activityName": "Diesel",
+  "organizationId": "dummy-org-id",
+  "recommendationHistory": [
+    "Conduct staff training on eco-driving"
+  ]
+}

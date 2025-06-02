@@ -1,0 +1,30 @@
+{
+  "recommendations": [
+    {
+      "activityId": "uuid-2",
+      "activityName": "Diesel",
+      "scope": "1.1",
+      "recommendation": "Replace diesel generators with solar PV",
+      "impactLevel": "HIGH",
+      "estimatedReductionPercentage": 30.0,
+      "feasibilityScore": 8.5,
+      "feasibilityLevel": "HIGH",
+      "cost": 8000.0,
+      "infrastructureRequirements": "No major infrastructure changes",
+      "technologyStatus": "Commercially available globally"
+    },
+    {
+      "activityId": "uuid-1",
+      "activityName": "Natural Gas",
+      "scope": "1.1",
+      "recommendation": "Switch to biogas or RNG",
+      "impactLevel": "MEDIUM",
+      "estimatedReductionPercentage": 15.0,
+      "feasibilityScore": 6.2,
+      "feasibilityLevel": "MEDIUM",
+      "cost": 25000.0,
+      "infrastructureRequirements": "Minor pipeline retrofitting",
+      "technologyStatus": "Available in select regions"
+    }
+  ]
+}

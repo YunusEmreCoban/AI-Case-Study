@@ -1,0 +1,61 @@
+fetch_candidates_multi_task:
+  description: |
+    You are given:
+      - all_records: {{all_records}}
+      - activity_ids: {{activity_ids}}
+      - activity_names: {{activity_names}}
+
+    Both activity_ids and activity_names should match.
+          (obj["activityId"] in activity_ids) AND (obj["activityName"] in activity_names)
+
+    If there are no matching objects, output the boolean value: false
+
+    ! Do not include objects if only one of the fields matches.
+    ! Do not invent, modify, or reformat objects.
+    ! Output only a plain JSON array, or boolean false. No markdown or extra keys.
+  expected_output: >
+    [ { ...candidate objects... } ]  ── or ── false
+
+fetch_candidates_single_task:
+  description: |
+    You are given:
+      - all_records: {{all_records}}
+      - activity_ids: {{activity_ids}}
+      - activity_names: {{activity_names}}
+      - history: {{history}}
+
+    For each object obj in all_records:
+      - **Include obj in your output if and only if:**
+          (obj["activityId"] == activity_ids[0]) AND (obj["activityName"] == activity_names[0])
+          AND obj["recommendation"] is not in history
+
+    **You must only return objects that are exactly present in all_records.**
+    **Never invent, generate, or synthesize any new objects or recommendations.**
+    **Never return any object not present in all_records, even if it seems relevant.**
+    **If there are no matching objects, output only the boolean value: false.**
+
+    ! Do not include objects if only one of the fields matches.
+    ! Never invent, reformat, or change any data.
+    ! Output only a plain JSON array or boolean false. No markdown or extra keys.
+  expected_output: >
+    [ { ...candidate objects... } ]  ── or ── false
+    
+rank_and_select_task:
+  description: |
+    Input variable: candidates (array from the previous task)
+
+    ONLY use the input candidates. Do not invent or create new data.
+
+    Order imput with the:
+      - impactLevel  (HIGH > MEDIUM > LOW)
+      - then feasibilityLevel (HIGH > MEDIUM > LOW)
+
+    Return up to {{maxRecommendationAmount}} recommendations not more from the input 
+    If only 1 candidate exists, return it.
+    Do not change the key order of the original objects.
+    Return the objects **exactly as-is**, without reformatting or reordering keys.
+    Output a **JSON array only** — no markdown, no extra keys.
+    Output plain JSON:
+      { "recommendations": [ ... ] }
+  expected_output: >
+    { "recommendations": [ ... ] }

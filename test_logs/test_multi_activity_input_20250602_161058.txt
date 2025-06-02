@@ -1,0 +1,20 @@
+{
+  "scope": "1.1",
+  "scopeName": "Stationary Combustion",
+  "maxRecommendationAmount": 2,
+  "activities": [
+    {
+      "id": "uuid-1",
+      "name": "Natural Gas"
+    },
+    {
+      "id": "uuid-2",
+      "name": "Diesel"
+    },
+    {
+      "id": "uuid-3",
+      "name": "Diesel"
+    }
+  ],
+  "organizationId": "dummy-org-id"
+}
