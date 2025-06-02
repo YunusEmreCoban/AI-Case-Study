@@ -99,7 +99,8 @@ cd AI-Case-Study
 2. **Set up the virtual environment**
 ```bash
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate #On Windows
+source venv/bin/activate #On Mac/Linux
 ```
 3. **Install dependencies bash Copy Edit**
 ```bash
