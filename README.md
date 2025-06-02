@@ -119,6 +119,10 @@ export OPENAI_API_KEY=sk-x  #On Linux
 uvicorn main:app --reload
 ```
 **Endpoint will be:  http://localhost:8000/ for API **
+If you have problem with deploying on Mac/Linux try this command:
+```bash
+./venv/bin/uvicorn main:app --reload
+```
 
 ---
 ## 📬 API Endpoints
