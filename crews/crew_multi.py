@@ -1,7 +1,7 @@
 import json
 from typing import List
 from crewai import Agent, Task, Crew, Process, TaskOutput
-from crewai.project import CrewBase, agent, task, crew
+from crewai.project import CrewBase, agent, crew
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai.tasks.conditional_task import ConditionalTask
 
