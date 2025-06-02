@@ -1,3 +1,4 @@
-crewai==0.121.1
-fastapi==0.115.9
-tqdm==4.67.1
+crewai
+fastapi
+tqdm
+requests
