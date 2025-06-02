@@ -91,7 +91,7 @@ Agent behavior and task flow are configured via YAML:
 Ensure you have Python >=3.10 <3.13 installed on your system for crewai.
 1. **Clone the repository**
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
+git https://github.com/YunusEmreCoban/AI-Case-Study.git
 cd AI-Case-Study
 ```
 2. **Set up the virtual environment**
