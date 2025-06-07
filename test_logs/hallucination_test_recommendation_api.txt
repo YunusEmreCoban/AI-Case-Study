@@ -1,9 +1,0 @@
-Test run at 2025-06-02 16:00:39
-
-Single (partial history) - should succeed: PASS (10 runs)
-Single (full history) - should error: PASS (10 runs)
-Multi (valid activities) - should succeed: PASS (10 runs)
-Multi (invalid activities) - should error: PASS (10 runs)
-Single (invalid activity) - should error: PASS (10 runs)
-
-

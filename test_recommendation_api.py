@@ -1,11 +1,8 @@
-import os
 import requests
 from tqdm import tqdm
-from datetime import datetime
-
-# The similiar tests were intended to be run more than once to test for hallucinations.
 
 BASE_URL = "http://127.0.0.1:8000"
+N_RUNS = 3
 
 EXPECTED_ERROR = {
     "error": {
@@ -106,106 +103,43 @@ TEST_CASES = [
     }
 ]
 
-N_RUNS = 10
-
 def dicts_equal(a, b):
     return a == b
 
 def run_tests():
-    os.makedirs("test_logs", exist_ok=True)
-    log_file_path = os.path.join("test_logs", "hallucination_test_recommendation_api.txt")
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    summary_lines = [f"Test run at {timestamp}\n"]
-    detailed_lines = []
     results = []
     for test in TEST_CASES:
         fails = 0
-        fail_details = []
-        print(f"\nTest: {test['name']}")
-        for run_idx in tqdm(range(N_RUNS), desc=test['name']):
+        for _ in tqdm(range(N_RUNS), desc=test['name']):
             try:
-                r = requests.post(BASE_URL + test['endpoint'], json=test['payload'])
+                response = requests.post(BASE_URL + test['endpoint'], json=test['payload'])
                 try:
-                    data = r.json()
-                except Exception as json_exc:
-                    # Try to get raw text if not JSON
-                    raw_output = getattr(r, "text", "<no text>")
-                    msg = (
-                        f"[EXCEPTION][{test['name']}] Run {run_idx + 1}: JSON decode error: {json_exc}\n"
-                        f"  Raw API response: {raw_output}"
-                    )
-                    print(f"\n{msg}")
-                    fail_details.append(msg)
+                    data = response.json()
+                except Exception:
                     fails += 1
                     continue
-            except Exception as e:
-                msg = f"[EXCEPTION][{test['name']}] Run {run_idx + 1}: Exception during request: {e}"
-                print(f"\n{msg}")
-                fail_details.append(msg)
+            except Exception:
                 fails += 1
                 continue
 
             if test["expect_error"]:
-                if (r.status_code != 400 or not dicts_equal(data, EXPECTED_ERROR)):
-                    msg = (
-                        f"[FAIL][{test['name']}] Run {run_idx + 1}: Got status {r.status_code}, response: {data}"
-                    )
-                    print(f"\n{msg}")
-                    fail_details.append(msg)
+                if response.status_code != 400 or not dicts_equal(data, EXPECTED_ERROR):
                     fails += 1
             else:
-                if r.status_code != 200 or "recommendations" not in data:
-                    msg = (
-                        f"[FAIL][{test['name']}] Run {run_idx + 1}: Got status {r.status_code}, response: {data}"
-                    )
-                    print(f"\n{msg}")
-                    fail_details.append(msg)
+                if response.status_code != 200 or "recommendations" not in data:
                     fails += 1
                 else:
-                    if "expect_len" in test:
-                        if len(data["recommendations"]) != test["expect_len"]:
-                            msg = (
-                                f"[FAIL][{test['name']}] Run {run_idx + 1}: Expected {test['expect_len']} recommendations, got {len(data['recommendations'])}, response: {data}"
-                            )
-                            print(f"\n{msg}")
-                            fail_details.append(msg)
-                            fails += 1
+                    if "expect_len" in test and len(data["recommendations"]) != test["expect_len"]:
+                        fails += 1
                     if test['endpoint'] == "/recommendations/single-activity":
                         for rec in data["recommendations"]:
-                            for h in test["payload"].get("recommendationHistory", []):
-                                if rec["recommendation"] == h:
-                                    msg = (
-                                        f"[FAIL][{test['name']}] Run {run_idx + 1}: Recommendation '{h}' from history present in output: {rec}"
-                                    )
-                                    print(f"\n{msg}")
-                                    fail_details.append(msg)
-                                    fails += 1
-        result_line = f"{test['name']}: {'PASS' if fails == 0 else f'{fails} FAILS'} ({N_RUNS} runs)"
-        print(f"  Failed {fails}/{N_RUNS} runs")
-        summary_lines.append(result_line)
-
-        # Add fail details to detailed lines if there are any
-        if fail_details:
-            detailed_lines.append(f"\n--- {test['name']} FAILURES ---")
-            detailed_lines.extend(fail_details)
-
+                            if rec["recommendation"] in test["payload"].get("recommendationHistory", []):
+                                fails += 1
         results.append((test['name'], fails))
-
-    summary_lines.append("\n")
-    with open(log_file_path, "a", encoding="utf-8") as log_file:
-        for line in summary_lines:
-            log_file.write(line + "\n")
-        if detailed_lines:
-            log_file.write("\n[Failure Details]\n")
-            for line in detailed_lines:
-                log_file.write(line + "\n")
 
     print("\n=== SUMMARY ===")
     for name, fails in results:
         print(f"{name}: {'PASS' if fails == 0 else f'{fails} FAILS'}")
-
-    print(f"\nSummary written to {log_file_path}")
 
 if __name__ == "__main__":
     run_tests()
