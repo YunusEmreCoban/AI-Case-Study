@@ -5,7 +5,7 @@ from crewai import LLM
 def azure_llm_provider():
     azure_llm = LLM(
         model="azure/emre-gpt-4o",
-        api_base="https://carbondeck-prod-aoi.openai.azure.com/openai/deployments/emre-gpt-4o/chat/completions?api-version=2025-01-01-preview",  # base URL only, no /openai...
+        api_base="https://carbondeck-prod-aoi.openai.azure.com/openai/deployments/emre-gpt-4o/chat/completions?api-version=2025-01-01-preview",
         api_key="BabjF1jprtczL0vlzEyo0bkzb9Z1VStRTJXh11sU9JIRmEHe0jhLJQQJ99BDACfhMk5XJ3w3AAABACOG0qrD"
     )
     return azure_llm
