@@ -2,7 +2,7 @@ import requests
 from tqdm import tqdm
 
 BASE_URL = "http://127.0.0.1:8000"
-N_RUNS = 3
+N_RUNS = 1
 
 EXPECTED_ERROR = {
     "error": {

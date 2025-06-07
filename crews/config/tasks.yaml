@@ -9,7 +9,8 @@ fetch_candidates_multi_task:
           (obj["activityId"] in activity_ids) AND (obj["activityName"] in activity_names)
 
     If there are no matching objects, output the boolean value: false
-
+    
+    ! DO NOT output ```json or any code block.
     ! Do not include objects if only one of the fields matches.
     ! Do not invent, modify, or reformat objects.
     ! Output only a plain JSON array, or boolean false. No markdown or extra keys.
@@ -44,18 +45,22 @@ rank_and_select_task:
   description: |
     Input variable: candidates (array from the previous task)
 
-    ONLY use the input candidates. Do not invent or create new data.
+    ONLY use and return the input candidates. **Never invent, remove, or create new data or keys.**
+    DO NOT output ```json or any code block.
+    - Order the candidates by:
+        - impactLevel  (HIGH > MEDIUM > LOW)
+        - then feasibilityLevel (HIGH > MEDIUM > LOW)
+    - Return up to {{maxRecommendationAmount}} candidates, never more.
+    - If only 1 candidate exists, return it.
+    - **You MUST return the FULL original candidate objects as they appear in the input.**
+    - **DO NOT remove, reformat, change, or omit any keys.**
+    - **Do not change key order, and do not add or remove keys.**
+    - Output only JSON — no markdown, no extra text or keys.
 
-    Order input with the:
-      - impactLevel  (HIGH > MEDIUM > LOW)
-      - then feasibilityLevel (HIGH > MEDIUM > LOW)
+    - Output a JSON object:
+        { "recommendations": [ ... ] }
 
-    Return up to {{maxRecommendationAmount}} recommendations not more from the input 
-    If only 1 candidate exists, return it.
-    Do not change the key order of the original objects.
-    Return the objects **exactly as-is**, without reformatting or reordering keys.
-    Output a **JSON array only** — no markdown, no extra keys.
-    Output plain JSON:
-      { "recommendations": [ ... ] }
+    If there are no candidates, return:
+      { "recommendations": [] }
   expected_output: >
     { "recommendations": [ ... ] }

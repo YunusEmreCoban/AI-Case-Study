@@ -4,7 +4,7 @@ from crewai.project import CrewBase, agent, crew
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai.tasks.conditional_task import ConditionalTask
 
-from crews.crew_utils import has_candidates
+from crews.crew_utils import azure_llm_provider, has_candidates
 
 @CrewBase
 class MultiRecommendationCrew:
@@ -28,12 +28,12 @@ class MultiRecommendationCrew:
     @agent
     def matcher(self) -> Agent:
         """Agent: Fetch candidate recommendations for id and name matching"""
-        return Agent(config=self.agents_config["matcher"], allow_delegation=False)
+        return Agent(config=self.agents_config["matcher"], allow_delegation=False,llm=azure_llm_provider())
 
     @agent
     def ranker(self) -> Agent:
         """Agent: Rank selected candidates. Based on impactLevel and feasibilityLevel"""
-        return Agent(config=self.agents_config["ranker"], allow_delegation=False, memory=True)
+        return Agent(config=self.agents_config["ranker"], allow_delegation=False, llm=azure_llm_provider())
 
     def fetch_candidates_multi_task(self) -> Task:
         """Task: Fetch candidates matching the multi-activity criteria."""
