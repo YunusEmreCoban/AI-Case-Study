@@ -106,11 +106,6 @@ source venv/bin/activate #On Mac/Linux
 ```bash
 pip install -r requirements.txt
 ```
-4. **Set your OpenAI API key**
-```bash
-set OPENAI_API_KEY=sk-x #On Windows
-export OPENAI_API_KEY=sk-x  #On Linux
-```
 ---
 ## ▶️ Running the API
 

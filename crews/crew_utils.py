@@ -1,6 +1,5 @@
 import json
 from crewai import TaskOutput
-from langchain_openai import AzureChatOpenAI
 from crewai import LLM
 
 def azure_llm_provider():
