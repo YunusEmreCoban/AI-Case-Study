@@ -12,8 +12,6 @@ from crews.crew_multi import MultiRecommendationCrew
 from crews.crew_single import SingleRecommendationCrew
 
 DATA = json.loads(pathlib.Path("data/dummy_recommendations.json").read_text(encoding="utf-8"))
-print("[DEBUG] DATA loaded:", DATA)
-
 
 def no_activity_error(message: str = "No activity found for analysis.") -> ErrorResponse:
     return ErrorResponse(error=ErrorDetail(code="ERR_NO_ACTIVITY", message=message))
