@@ -1,6 +1,6 @@
 import json
 import pathlib
-from typing import Union
+from typing import Union, Tuple
 from models import (
     ErrorDetail,
     MultiActivityRequest,
@@ -11,78 +11,62 @@ from models import (
 from crews.crew_multi import MultiRecommendationCrew
 from crews.crew_single import SingleRecommendationCrew
 
-DATA = json.loads(pathlib.Path(r"data/dummy_recommendations.json").read_text(encoding="utf-8"))
+DATA = json.loads(pathlib.Path("data/dummy_recommendations.json").read_text(encoding="utf-8"))
 print("[DEBUG] DATA loaded:", DATA)
 
-multi_crew_builder = MultiRecommendationCrew()
-single_crew_builder = SingleRecommendationCrew()
+multi_crew = MultiRecommendationCrew()
+single_crew = SingleRecommendationCrew()
 
-def no_activity_error(message="No activity found for analysis."):
-    return ErrorResponse(
-        error=ErrorDetail(
-            code="ERR_NO_ACTIVITY",
-            message=message,
-        )
-    )
+def no_activity_error(message: str = "No activity found for analysis.") -> ErrorResponse:
+    return ErrorResponse(error=ErrorDetail(code="ERR_NO_ACTIVITY", message=message))
 
-def _parse_output(out) -> Union[list, ErrorResponse]:
+def parse_output(out) -> Union[Tuple[list, int], ErrorResponse]:
+    """Extracts recommendations and token usage, or returns an error."""
     try:
         result = out.json_dict if hasattr(out, "json_dict") and out.json_dict else json.loads(out.raw)
-        # Handle JSON boolean false and string "false"
+        token_count = out.token_usage.total_tokens
+
+        # Handle explicit false-y responses
         if result is False or (isinstance(result, str) and result.strip().lower() == "false"):
             return no_activity_error()
-
-        # Handle {"recommendations": ...}
         if isinstance(result, dict) and "recommendations" in result:
             recs = result["recommendations"]
             if not recs:
                 return no_activity_error()
-            return recs
-
+            return recs, token_count
     except Exception:
         return no_activity_error("Crew returned non-dict or corrupt output")
 
-def _run_crew_multi(ids, names, k):
-    out = multi_crew_builder.multi_crew().kickoff(
-        inputs={
-            "activity_ids": ids,
-            "activity_names": names,
-            "maxRecommendationAmount": k,
-            "all_records": DATA,
-        }
-    )
-    return _parse_output(out)
+def run_crew(crew, ids, names, k, history=None) -> Union[Tuple[list, int], ErrorResponse]:
+    """Generic crew runner for single or multi."""
+    inputs = {
+        "activity_ids": ids,
+        "activity_names": names,
+        "maxRecommendationAmount": k,
+        "all_records": DATA,
+    }
+    if history is not None:
+        inputs["history"] = history
+    out = crew.kickoff(inputs=inputs)
+    return parse_output(out)
 
-def _run_crew_single(ids, names, k, history):
-    out = single_crew_builder.single_crew().kickoff(
-        inputs={
-            "activity_ids": ids,
-            "activity_names": names,
-            "maxRecommendationAmount": k,
-            "history": history,
-            "all_records": DATA,
-        }
-    )
-    return _parse_output(out)
-
-def multi_activity_service(req: MultiActivityRequest):
+def multi_activity_service(req: MultiActivityRequest) -> Union[RecommendationResponse, ErrorResponse]:
     ids = [a.id for a in req.activities]
     names = [a.name for a in req.activities]
-    recs = _run_crew_multi(ids, names, req.maxRecommendationAmount)
-    if isinstance(recs, ErrorResponse):
-        return recs
-    if not recs:
-        return no_activity_error()
-    return RecommendationResponse(recommendations=recs)
+    result = run_crew(multi_crew.multi_crew(), ids, names, req.maxRecommendationAmount)
+    if isinstance(result, ErrorResponse):
+        return result
+    recs, token_usage = result
+    return RecommendationResponse(recommendations=recs, tokenUsage=token_usage)
 
-def single_activity_service(req: SingleActivityRequest):
-    recs = _run_crew_single(
+def single_activity_service(req: SingleActivityRequest) -> Union[RecommendationResponse, ErrorResponse]:
+    result = run_crew(
+        single_crew.single_crew(),
         [req.activityId], [req.activityName],
         req.recommendationAmount,
         req.recommendationHistory
     )
-    if isinstance(recs, ErrorResponse):
-        return recs
-    if not recs:
-        return no_activity_error()
-    return RecommendationResponse(recommendations=recs)
+    if isinstance(result, ErrorResponse):
+        return result
+    recs, token_usage = result
+    return RecommendationResponse(recommendations=recs, tokenUsage=token_usage)

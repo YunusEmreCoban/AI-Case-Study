@@ -1,4 +1,4 @@
-from typing import List, Literal
+from typing import List, Literal, Optional
 from pydantic import BaseModel, Field
 
 ImpactLevel = Literal["HIGH", "MEDIUM", "LOW"]
@@ -40,6 +40,7 @@ class Recommendation(BaseModel):
     
 class RecommendationResponse(BaseModel):
     recommendations: List[Recommendation]
+    tokenUsage: Optional[int] = None
 
 class ErrorDetail(BaseModel):
     code: str
