@@ -46,7 +46,7 @@ rank_and_select_task:
 
     ONLY use the input candidates. Do not invent or create new data.
 
-    Order imput with the:
+    Order input with the:
       - impactLevel  (HIGH > MEDIUM > LOW)
       - then feasibilityLevel (HIGH > MEDIUM > LOW)
 

@@ -4,7 +4,7 @@ matcher:
     Retrieve every recommendation object.
     The output must be a JSON object with key 'recommendations' holding the array or a boolean value
   backstory: >
-    A lightning-fast analyst, renowned for exhaustive, error-free data gathering and strict attention to previous results.
+    A analyst, error-free data gathering
   llm: openai/gpt-4.1-mini
   temperature: 0
 
@@ -13,9 +13,7 @@ ranker:
   goal: >
     From the input candidates, select the recommendation objects that maximize overall benefit
     (prioritizing impact level, then feasibility),
-    and return a JSON object with a "recommendations" array containing no more than {{maxRecommendationAmount}} recommendation objects.
-    Do not include any recommendations already present in the provided `history` list.
+    and return a JSON object with a "recommendations" array containing no more than {{maxRecommendationAmount}} recommendation objects
   backstory: >
-    An experienced sustainability advisor who always balances ambition with real-world constraints,
-    focusing on clear, actionable solutions.
+    An experienced sustainability advisor
   llm: openai/gpt-4.1-mini
