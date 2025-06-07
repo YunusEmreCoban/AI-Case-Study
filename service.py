@@ -14,8 +14,6 @@ from crews.crew_single import SingleRecommendationCrew
 DATA = json.loads(pathlib.Path("data/dummy_recommendations.json").read_text(encoding="utf-8"))
 print("[DEBUG] DATA loaded:", DATA)
 
-multi_crew = MultiRecommendationCrew()
-single_crew = SingleRecommendationCrew()
 
 def no_activity_error(message: str = "No activity found for analysis.") -> ErrorResponse:
     return ErrorResponse(error=ErrorDetail(code="ERR_NO_ACTIVITY", message=message))
@@ -53,6 +51,7 @@ def run_crew(crew, ids, names, k, history=None) -> Union[Tuple[list, int], Error
 def multi_activity_service(req: MultiActivityRequest) -> Union[RecommendationResponse, ErrorResponse]:
     ids = [a.id for a in req.activities]
     names = [a.name for a in req.activities]
+    multi_crew = MultiRecommendationCrew()
     result = run_crew(multi_crew.multi_crew(), ids, names, req.maxRecommendationAmount)
     if isinstance(result, ErrorResponse):
         return result
@@ -60,6 +59,7 @@ def multi_activity_service(req: MultiActivityRequest) -> Union[RecommendationRes
     return RecommendationResponse(recommendations=recs, tokenUsage=token_usage)
 
 def single_activity_service(req: SingleActivityRequest) -> Union[RecommendationResponse, ErrorResponse]:
+    single_crew = SingleRecommendationCrew()
     result = run_crew(
         single_crew.single_crew(),
         [req.activityId], [req.activityName],

@@ -1,8 +1,7 @@
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 from models import (
     MultiActivityRequest, SingleActivityRequest,
-    RecommendationResponse, ErrorResponse
+    ErrorResponse
 )
 from service import multi_activity_service, single_activity_service
 from fastapi.responses import ORJSONResponse
