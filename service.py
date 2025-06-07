@@ -24,7 +24,7 @@ def parse_output(out) -> Union[Tuple[list, int], ErrorResponse]:
         result = out.json_dict if hasattr(out, "json_dict") and out.json_dict else json.loads(out.raw)
         token_count = out.token_usage.total_tokens
 
-        # Handle explicit false-y responses
+        # Handle explicit false-y responses for if matcher return falses
         if result is False or (isinstance(result, str) and result.strip().lower() == "false"):
             return no_activity_error()
         if isinstance(result, dict) and "recommendations" in result:
