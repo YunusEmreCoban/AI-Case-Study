@@ -43,12 +43,10 @@ class SingleRecommendationCrew:
 
     def rank_and_select_task(self) -> Task:
         """Task: Conditionally rank and select top recommendations."""
-        return ConditionalTask(
-            description="Rank and select top recommendations.",
-            agent=self.ranker(),
-            expected_output="Top-ranked recommendations.",
-            condition=has_candidates
-        )
+        return ConditionalTask(config=self.tasks_config["rank_and_select_task"], 
+                               agent=self.ranker(),
+                               condition=has_candidates)
+
 
 
     @crew
